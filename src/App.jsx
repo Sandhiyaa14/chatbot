@@ -21,7 +21,7 @@ function App() {
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [responsePage, setResponsePage] = useState(false);
-  const ai = new GoogleGenerativeAI({ apiKey: "AIzaSyDQ3zLH_ijUYzzmZidiHm7v9Ja_NJ76H2w" });
+  const ai = new GoogleGenerativeAI({     apiKey: process.env.GEMINI_API_KEY, });
 
   const handleClick = (id) => {
     const selected = suggestions.find((s) => s.id == id);
