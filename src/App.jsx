@@ -21,7 +21,7 @@ function App() {
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [responsePage, setResponsePage] = useState(false);
-  const ai = new GoogleGenerativeAI({     apiKey: process.env.GEMINI_API_KEY, });
+const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   const handleClick = (id) => {
     const selected = suggestions.find((s) => s.id == id);
@@ -31,25 +31,16 @@ function App() {
   };
 
   const handleSend = async () => {
-    if(!input) return;
-    const userInput = input;
-
     setInput("");
     setLoading(true);
     setResponsePage(true);
     setMessage(prev => [...prev, { sender: "user", text: input }]);
 
-     try {
-    const model = ai.getGenerativeModel({ model: "gemini-pro" });
-    const result = await model.generateContent(userInput);
+    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent(input);
     const response = await result.response;
     const text = await response.text();
-
-      setMessage(prev => [...prev, { sender: "bot", text }]);
-    } catch (error) {
-      console.error("Error from Gemini API:", error);
-      setMessage(prev => [...prev, { sender: "bot", text: "❌ Something went wrong." }]);
-    }
+    setMessage(prev => [...prev, { sender: "bot", text }]);
 
     setLoading(false);
   };
