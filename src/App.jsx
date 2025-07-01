@@ -36,12 +36,18 @@ function App() {
     setResponsePage(true);
     setMessage(prev => [...prev, { sender: "user", text: input }]);
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: input,
-    });
+     try {
+    const model = ai.getGenerativeModel({ model: "gemini-pro" });
+    const result = await model.generateContent(input);
+    const response = await result.response;
+    const text = await response.text();
 
-    setMessage(prev => [...prev, { sender: "bot", text: response.text }]);
+      setMessage(prev => [...prev, { sender: "bot", text }]);
+    } catch (error) {
+      console.error("Error from Gemini API:", error);
+      setMessage(prev => [...prev, { sender: "bot", text: "❌ Something went wrong." }]);
+    }
+
     setLoading(false);
   };
 
