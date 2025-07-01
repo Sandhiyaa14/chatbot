@@ -31,6 +31,9 @@ function App() {
   };
 
   const handleSend = async () => {
+    if(!input) return;
+    const userInput = input;
+
     setInput("");
     setLoading(true);
     setResponsePage(true);
@@ -38,7 +41,7 @@ function App() {
 
      try {
     const model = ai.getGenerativeModel({ model: "gemini-pro" });
-    const result = await model.generateContent(input);
+    const result = await model.generateContent(userInput);
     const response = await result.response;
     const text = await response.text();
 
